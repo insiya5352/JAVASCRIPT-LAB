@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Shopping Bill - PRN 1156</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#f2f2f2;
+}
+.container{
+    width:450px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:8px;
+}
+h2{
+    text-align:center;
+}
+input,select{
+    width:100%;
+    padding:6px;
+    margin:5px 0;
+}
+button{
+    width:100%;
+    padding:8px;
+    background:green;
+    color:white;
+    border:none;
+}
+#result{
+    margin-top:20px;
+    background:#eef;
+    padding:10px;
+}
+</style>
+
+<script>
+function bill(){
+
+var cname=document.getElementById("cname").value;
+var mobile=document.getElementById("mobile").value;
+var invoice=document.getElementById("invoice").value;
+var product=document.getElementById("product").value;
+var qty=parseFloat(document.getElementById("qty").value);
+var rate=parseFloat(document.getElementById("rate").value);
+var payment=document.getElementById("payment").value;
+var member=document.getElementById("member").value;
+
+var amount=qty*rate;
+var discount=(member=="Yes")?amount*0.10:0;
+var gst=(amount-discount)*0.05;
+var packing=30;
+var total=amount-discount+gst+packing;
+
+document.getElementById("result").innerHTML=
+"<h3>Invoice</h3>"+
+"Customer Name : "+cname+"<br>"+
+"Mobile : "+mobile+"<br>"+
+"Invoice No : "+invoice+"<br>"+
+"Product Name : "+product+"<br>"+
+"Quantity : "+qty+" kg<br>"+
+"Rate : ₹"+rate+"<br>"+
+"Amount : ₹"+amount.toFixed(2)+"<br>"+
+"Discount : ₹"+discount.toFixed(2)+"<br>"+
+"GST (5%) : ₹"+gst.toFixed(2)+"<br>"+
+"Packing Charges : ₹30<br>"+
+"Payment Mode : "+payment+"<br>"+
+"Membership : "+member+"<br><hr>"+
+"<b>Total Bill : ₹"+total.toFixed(2)+"</b>";
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Online Shopping Billing System</h2>
+
+Customer Name
+<input type="text" id="cname">
+
+Mobile Number
+<input type="text" id="mobile">
+
+Invoice Number
+<input type="text" id="invoice">
+
+Product Name
+<input type="text" id="product">
+
+Quantity (kg)
+<input type="number" id="qty">
+
+Rate per kg
+<input type="number" id="rate">
+
+Payment Mode
+<select id="payment">
+<option>Cash</option>
+<option>Card</option>
+<option>UPI</option>
+</select>
+
+Membership
+<select id="member">
+<option>Yes</option>
+<option>No</option>
+</select>
+
+<button onclick="bill()">Calculate Bill</button>
+
+<div id="result"></div>
+
+</div>
+
+</body>
+</html>
