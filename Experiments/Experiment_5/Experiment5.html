@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Total Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #80f6ff, #5b86e5);
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .products {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            width: 220px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid #4da6ff;
+            border-radius: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background: #4b00d9;
+            color: white;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #31009c;
+        }
+
+        .result {
+            background: white;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .result p {
+            font-size: 18px;
+        }
+
+        .final {
+            font-size: 22px !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Choose Your Variant</h1>
+
+        <div class="products">
+
+            <div class="card">
+                <h2>Variant 1</h2>
+
+                <input type="number" id="qty1" placeholder="Quantity">
+                <input type="number" id="price1" placeholder="Price">
+
+                <button onclick="addToCart(1)">Add to Cart</button>
+            </div>
+
+            <div class="card">
+                <h2>Variant 2</h2>
+
+                <input type="number" id="qty2" placeholder="Quantity">
+                <input type="number" id="price2" placeholder="Price">
+
+                <button onclick="addToCart(2)">Add to Cart</button>
+            </div>
+
+            <div class="card">
+                <h2>Variant 3</h2>
+
+                <input type="number" id="qty3" placeholder="Quantity">
+                <input type="number" id="price3" placeholder="Price">
+
+                <button onclick="addToCart(3)">Add to Cart</button>
+            </div>
+
+        </div>
+
+        <div class="result">
+
+            <h2>Cart Summary</h2>
+
+            <p>Total Amount: ₹<span id="total">0.00</span></p>
+
+            <p>Discount (30%): ₹<span id="discount">0.00</span></p>
+
+            <p>Subtotal After Discount: ₹<span id="subtotal">0.00</span></p>
+
+            <p>GST (18%): ₹<span id="gst">0.00</span></p>
+
+            <p class="final">Final Amount: ₹<span id="final">0.00</span></p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // Array of objects
+        let cart = [];
+
+        // Function to add product to cart
+        function addToCart(variant) {
+
+            let quantity = Number(document.getElementById("qty" + variant).value);
+            let price = Number(document.getElementById("price" + variant).value);
+
+            if (quantity <= 0 || price <= 0) {
+                alert("Please enter valid quantity and price.");
+                return;
+            }
+
+            // Product object
+            let product = {
+                variant: variant,
+                quantity: quantity,
+                price: price
+            };
+
+            cart.push(product);
+
+            calculateCart();
+        }
+
+
+        // Calculate cart total
+        function calculateCart() {
+
+            // map() - calculates amount for every product
+            let amounts = cart.map(function(item) {
+                return item.quantity * item.price;
+            });
+
+
+            // reduce() - calculates total amount
+            let totalAmount = amounts.reduce(function(sum, amount) {
+                return sum + amount;
+            }, 0);
+
+
+            // filter() - keeps products whose amount is greater than 0
+            let validProducts = cart.filter(function(item) {
+                return item.quantity > 0 && item.price > 0;
+            });
+
+
+            // Discount calculation
+            let discount = totalAmount * 0.30;
+
+            // Amount after discount
+            let subtotal = totalAmount - discount;
+
+            // GST calculation
+            let gst = subtotal * 0.18;
+
+            // Final amount
+            let finalAmount = subtotal + gst;
+
+
+            // Display results
+            document.getElementById("total").innerText =
+                totalAmount.toFixed(2);
+
+            document.getElementById("discount").innerText =
+                discount.toFixed(2);
+
+            document.getElementById("subtotal").innerText =
+                subtotal.toFixed(2);
+
+            document.getElementById("gst").innerText =
+                gst.toFixed(2);
+
+            document.getElementById("final").innerText =
+                finalAmount.toFixed(2);
+        }
+
+    </script>
+
+</body>
+</html>
+```
