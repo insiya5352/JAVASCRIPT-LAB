@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>String Functions and Regex</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            padding: 30px;
+        }
+
+        .container {
+            width: 700px;
+            max-width: 90%;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 95%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #4da6ff;
+            border-radius: 8px;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 20px;
+            background: #4b00d9;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #31009c;
+        }
+
+        .result {
+            margin-top: 20px;
+            background: #f2f2f2;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>String Functions & Regex</h1>
+
+        <h3>Email Validation</h3>
+
+        <input type="text" id="email" placeholder="Enter email address">
+
+        <button onclick="validateEmail()">Validate Email</button>
+
+        <p id="emailResult"></p>
+
+
+        <h3>Enter Text</h3>
+
+        <textarea id="text"
+            placeholder="Enter text containing emails, phone numbers or URLs"></textarea>
+
+        <button onclick="analyzeText()">Analyze Text</button>
+
+
+        <div class="result">
+
+            <h3>Text Analysis</h3>
+
+            <p>Characters: <span id="characters">0</span></p>
+
+            <p>Words: <span id="words">0</span></p>
+
+            <p>Sentences: <span id="sentences">0</span></p>
+
+            <p>Uppercase Text: <span id="upper">-</span></p>
+
+            <p>Lowercase Text: <span id="lower">-</span></p>
+
+            <p>Extracted Emails: <span id="emails">None</span></p>
+
+            <p>Extracted Phone Numbers: <span id="phones">None</span></p>
+
+            <p>Extracted URLs: <span id="urls">None</span></p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // Email validation using Regular Expression
+        function validateEmail() {
+
+            let email = document.getElementById("email").value.trim();
+
+            let emailPattern =
+                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (emailPattern.test(email)) {
+                document.getElementById("emailResult").innerText =
+                    "Valid Email Address";
+            } else {
+                document.getElementById("emailResult").innerText =
+                    "Invalid Email Address";
+            }
+        }
+
+
+        // Text analysis and data extraction
+        function analyzeText() {
+
+            let text = document.getElementById("text").value.trim();
+
+
+            // String functions
+            let characters = text.length;
+
+            let words = text === "" ? 0 : text.split(/\s+/).length;
+
+            let sentences = text === "" ? 0 :
+                text.split(/[.!?]+/).filter(function(sentence) {
+                    return sentence.trim() !== "";
+                }).length;
+
+
+            // Convert text to uppercase
+            let upperText = text.toUpperCase();
+
+            // Convert text to lowercase
+            let lowerText = text.toLowerCase();
+
+
+            // Regex for extracting email addresses
+            let emailPattern =
+                /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+
+            let emails = text.match(emailPattern);
+
+
+            // Regex for extracting phone numbers
+            let phonePattern =
+                /\b\d{10}\b/g;
+
+            let phones = text.match(phonePattern);
+
+
+            // Regex for extracting URLs
+            let urlPattern =
+                /https?:\/\/[^\s]+/g;
+
+            let urls = text.match(urlPattern);
+
+
+            // Display results
+            document.getElementById("characters").innerText =
+                characters;
+
+            document.getElementById("words").innerText =
+                words;
+
+            document.getElementById("sentences").innerText =
+                sentences;
+
+            document.getElementById("upper").innerText =
+                upperText || "-";
+
+            document.getElementById("lower").innerText =
+                lowerText || "-";
+
+            document.getElementById("emails").innerText =
+                emails ? emails.join(", ") : "None";
+
+            document.getElementById("phones").innerText =
+                phones ? phones.join(", ") : "None";
+
+            document.getElementById("urls").innerText =
+                urls ? urls.join(", ") : "None";
+        }
+
+    </script>
+
+</body>
+</html>
