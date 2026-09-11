@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiment 2 - Billing Calculator</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f4f8;
+    margin:0;
+    padding:40px;
+}
+
+.container{
+    width:420px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+h2{
+    text-align:center;
+    color:#2c3e50;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    padding:12px;
+    background:#3498db;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#2980b9;
+}
+
+#result{
+    margin-top:20px;
+    background:#eef7ff;
+    padding:15px;
+    border-radius:8px;
+    line-height:1.8;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Billing Calculator</h2>
+
+<label>Customer Name</label>
+<input type="text" id="name" placeholder="Enter customer name">
+
+<label>Product Name</label>
+<input type="text" id="product" placeholder="Enter product">
+
+<label>Price (₹)</label>
+<input type="number" id="price" placeholder="Enter price">
+
+<label>Quantity</label>
+<input type="number" id="quantity" placeholder="Enter quantity">
+
+<button onclick="calculateBill()">Generate Bill</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+var gstRate = 18;
+
+// const example
+const shopName = "ABC Super Store";
+
+function calculateBill(){
+
+    let customer = document.getElementById("name").value;
+    let product = document.getElementById("product").value;
+    let price = Number(document.getElementById("price").value);
+    let quantity = Number(document.getElementById("quantity").value);
+
+    if(customer=="" || product=="" || price<=0 || quantity<=0){
+        alert("Please enter valid details.");
+        return;
+    }
+
+    let amount = price * quantity;
+    let gst = amount * gstRate / 100;
+    let total = amount + gst;
+
+    const bill = {
+        customer,
+        product,
+        amount,
+        gst,
+        total
+    };
+
+    const {customer: cname, product: pname, amount: amt, gst: tax, total: finalTotal} = bill;
+
+    // Template Literals
+    document.getElementById("result").innerHTML = `
+        <h3>Bill Receipt</h3>
+        <b>Shop:</b> ${shopName}<br>
+        <b>Customer:</b> ${cname}<br>
+        <b>Product:</b> ${pname}<br>
+        <b>Amount:</b> ₹${amt.toFixed(2)}<br>
+        <b>GST (18%):</b> ₹${tax.toFixed(2)}<br>
+        <hr>
+        <h3>Total Bill: ₹${finalTotal.toFixed(2)}</h3>
+    `;
+
+}
+
+</script>
+
+</body>
+</html>
