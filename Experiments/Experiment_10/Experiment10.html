@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JSON Data Viewer</title>
+
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6fb;
+            color: #1d2739;
+        }
+
+        .navbar {
+            height: 65px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 34px;
+            height: 34px;
+            background-color: #5146e5;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logo-text h3 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .logo-text p {
+            margin: 3px 0 0;
+            font-size: 11px;
+            color: #78839a;
+        }
+
+        .nav-tag {
+            background-color: #eeeeff;
+            color: #5146e5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .main {
+            max-width: 760px;
+            margin: 55px auto;
+        }
+
+        .main h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .main-description {
+            margin-top: 7px;
+            margin-bottom: 20px;
+            color: #72809a;
+            font-size: 14px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(40, 50, 80, 0.08);
+            border: 1px solid #e4e8ef;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .card-title h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .card-title p {
+            margin: 5px 0 0;
+            color: #7a879d;
+            font-size: 12px;
+        }
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .fetch-btn {
+            background-color: #5146e5;
+            color: white;
+        }
+
+        .jquery-btn {
+            background-color: #edf0f5;
+            color: #455064;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .table-wrapper {
+            border: 1px solid #e1e5ec;
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f9fc;
+        }
+
+        th {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 11px;
+            color: #657188;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 12px 14px;
+            font-size: 13px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        td:first-child {
+            color: #5146e5;
+            font-weight: bold;
+        }
+
+        td:nth-child(2) {
+            font-weight: bold;
+        }
+
+        td:nth-child(3) {
+            color: #7a879d;
+            font-family: monospace;
+        }
+
+        tbody tr:hover {
+            background-color: #fafbff;
+        }
+
+
+        .status {
+            margin-top: 14px;
+            padding: 10px 13px;
+            border-radius: 7px;
+            background-color: #eafaf0;
+            color: #29934d;
+            font-size: 12px;
+        }
+
+        .error {
+            background-color: #fff0f0;
+            color: #d33d3d;
+        }
+
+
+        footer {
+            text-align: center;
+            color: #9aa5b8;
+            font-size: 11px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .main {
+                width: 92%;
+                margin: 30px auto;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .buttons {
+                width: 100%;
+            }
+
+            button {
+                flex: 1;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="logo-section">
+
+            <div class="logo">
+                JS
+            </div>
+
+            <div class="logo-text">
+
+                <h3>JSON Data Viewer</h3>
+
+                <p>
+                    JavaScript & jQuery Experiment
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-tag">
+            JSON DATA
+        </div>
+
+    </nav>
+
+
+    <main class="main">
+
+        <h1>Student Information</h1>
+
+        <p class="main-description">
+            Load and display student data using JavaScript Fetch API and jQuery.
+        </p>
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <h2>Student Records</h2>
+
+                    <p>
+                        Select a method to load the JSON data.
+                    </p>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button
+                        class="fetch-btn"
+                        onclick="loadUsingFetch()">
+
+                        Load using Fetch
+
+                    </button>
+
+
+                    <button
+                        class="jquery-btn"
+                        onclick="loadUsingJQuery()">
+
+                        Load using jQuery
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Student Name</th>
+
+                            <th>PRN</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="studentTable">
+
+                        <tr>
+
+                            <td
+                                colspan="3"
+                                style="text-align:center; color:#8994a8;">
+
+                                Click a button to load student data.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div
+                class="status"
+                id="status">
+
+                Ready to load JSON data.
+
+            </div>
+
+
+        </div>
+
+
+        <footer>
+
+            JSON Data Display • Fetch API & jQuery
+
+        </footer>
+
+    </main>
+
+
+    <script>
+
+        const studentData = [
+
+            {
+                "id": 1,
+                "name": "Insiya Hussain",
+                "prn": "24070521156"
+            },
+
+            {
+                "id": 2,
+                "name": "Aarav Kulkarni",
+                "prn": "24070521031"
+            },
+
+            {
+                "id": 3,
+                "name": "Ananya Patil",
+                "prn": "24070521047"
+            },
+
+            {
+                "id": 4,
+                "name": "Rohan Deshmukh",
+                "prn": "24070521068"
+            },
+
+            {
+                "id": 5,
+                "name": "Meera Joshi",
+                "prn": "24070521082"
+            },
+
+            {
+                "id": 6,
+                "name": "Aditya Sharma",
+                "prn": "24070521109"
+            }
+
+        ];
+
+
+        const jsonBlob = new Blob(
+            [JSON.stringify(studentData)],
+            {
+                type: "application/json"
+            }
+        );
+
+
+        const jsonURL = URL.createObjectURL(jsonBlob);
+
+
+
+        function loadUsingFetch() {
+
+            document.getElementById("status")
+                .textContent =
+                "Loading student records using Fetch API...";
+
+
+            document.getElementById("status")
+                .classList.remove("error");
+
+
+            // Fetch JSON data
+
+            fetch(jsonURL)
+
+                .then(function(response) {
+
+                    return response.json();
+
+                })
+
+                .then(function(data) {
+
+                    displayStudents(data);
+
+                    document.getElementById("status")
+                        .textContent =
+                        data.length +
+                        " student records loaded successfully using Fetch API.";
+
+                })
+
+                .catch(function(error) {
+
+                    document.getElementById("status")
+                        .textContent =
+                        "Error loading data.";
+
+                    document.getElementById("status")
+                        .classList.add("error");
+
+                    console.log(error);
+
+                });
+
+        }
+
+
+        function loadUsingJQuery() {
+
+            document.getElementById("status")
+                .textContent =
+                "Loading student records using jQuery $.getJSON()...";
+
+
+            document.getElementById("status")
+                .classList.remove("error");
+
+
+            // jQuery getJSON method
+
+            $.getJSON(jsonURL)
+
+                .done(function(data) {
+
+                    displayStudents(data);
+
+                    document.getElementById("status")
+                        .textContent =
+                        data.length +
+                        " student records loaded successfully using jQuery.";
+
+                })
+
+                .fail(function() {
+
+                    document.getElementById("status")
+                        .textContent =
+                        "Error loading JSON data.";
+
+                    document.getElementById("status")
+                        .classList.add("error");
+
+                });
+
+        }
+
+
+        function displayStudents(data) {
+
+            const table =
+                document.getElementById("studentTable");
+
+
+            // Clear previous table data
+
+            table.innerHTML = "";
+
+
+            // Loop through JSON data
+
+            data.forEach(function(student) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                // Create table row
+
+                row.innerHTML = `
+
+                    <td>
+                        ${student.id}
+                    </td>
+
+                    <td>
+                        ${student.name}
+                    </td>
+
+                    <td>
+                        ${student.prn}
+                    </td>
+
+                `;
+
+
+                // Add row to table
+
+                table.appendChild(row);
+
+            });
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
