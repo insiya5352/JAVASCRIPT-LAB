@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Storage Experiment</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+            transition: 0.3s;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 750px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 11px 16px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .primary {
+            background: #333;
+            color: white;
+        }
+
+        .secondary {
+            background: #ddd;
+            color: #222;
+        }
+
+        .danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .storage-box {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .storage-box p {
+            margin: 8px 0;
+            word-break: break-word;
+        }
+
+        .storage-title {
+            font-weight: bold;
+        }
+
+        .status {
+            padding: 10px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 7px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        body.dark {
+            background: #181818;
+            color: white;
+        }
+
+        body.dark .container {
+            background: #252525;
+        }
+
+        body.dark .card {
+            border-color: #444;
+        }
+
+        body.dark .subtitle {
+            color: #bbb;
+        }
+
+        body.dark input {
+            background: #333;
+            color: white;
+            border-color: #555;
+        }
+
+        body.dark .storage-box {
+            background: #333;
+        }
+
+        body.dark .secondary {
+            background: #555;
+            color: white;
+        }
+
+        body.dark .status {
+            background: #263b2b;
+            color: #90ee90;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <h1>User Preferences</h1>
+
+        <p class="subtitle">
+            JavaScript localStorage & sessionStorage Experiment
+        </p>
+
+
+        <div class="status" id="statusMessage">
+            Storage system is ready.
+        </div>
+
+        <div class="card">
+
+            <h2>👤 User Preferences</h2>
+
+            <label>Enter your name:</label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter your name"
+            >
+
+            <button class="primary" onclick="saveUsername()">
+                Save Name
+            </button>
+
+            <p>
+                Saved Name:
+                <strong id="displayName">Not saved</strong>
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>🎨 Theme Settings</h2>
+
+            <p>
+                Current Theme:
+                <strong id="themeText">Light</strong>
+            </p>
+
+            <button
+                class="primary"
+                id="themeButton"
+                onclick="toggleTheme()"
+            >
+                Switch to Dark Theme
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>🕒 Session Information</h2>
+
+            <p id="sessionMessage">
+                Checking session...
+            </p>
+
+            <p>
+                Session Visit Status:
+                <strong id="sessionStatus">Checking...</strong>
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>💾 Storage Information</h2>
+
+            <p>
+                This section displays the data currently stored
+                in your browser.
+            </p>
+
+
+            <div class="storage-box">
+
+                <p class="storage-title">
+                    Local Storage
+                </p>
+
+                <p>
+                    Theme:
+                    <strong id="localTheme">None</strong>
+                </p>
+
+                <p>
+                    Username:
+                    <strong id="localUsername">None</strong>
+                </p>
+
+            </div>
+
+
+            <div class="storage-box">
+
+                <p class="storage-title">
+                    Session Storage
+                </p>
+
+                <p>
+                    Visited:
+                    <strong id="sessionVisited">None</strong>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>⚙️ Storage Controls</h2>
+
+            <p>
+                Use these buttons to remove stored information.
+            </p>
+
+            <button
+                class="secondary"
+                onclick="clearLocalStorage()"
+            >
+                Clear Local Storage
+            </button>
+
+            <button
+                class="secondary"
+                onclick="clearSessionStorage()"
+            >
+                Clear Session Storage
+            </button>
+
+            <br>
+
+            <button
+                class="danger"
+                onclick="resetEverything()"
+            >
+                Reset Everything
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        window.onload = function () {
+
+            // Load the saved theme from localStorage
+            loadTheme();
+
+            // Load saved username from localStorage
+            loadUsername();
+
+            // Check sessionStorage information
+            checkSession();
+
+            // Display current storage values
+            updateStorageDisplay();
+
+        };
+
+
+        function toggleTheme() {
+
+            // Check whether dark theme is active
+            if (document.body.classList.contains("dark")) {
+
+                // Change to light theme
+                document.body.classList.remove("dark");
+
+                // Save light theme in localStorage
+                localStorage.setItem("theme", "light");
+
+                updateThemeText("light");
+
+                showStatus("Light theme saved in localStorage.");
+
+            } else {
+
+                // Change to dark theme
+                document.body.classList.add("dark");
+
+                // Save dark theme in localStorage
+                localStorage.setItem("theme", "dark");
+
+                updateThemeText("dark");
+
+                showStatus("Dark theme saved in localStorage.");
+            }
+
+            updateStorageDisplay();
+        }
+
+
+        function loadTheme() {
+
+            // Get theme from localStorage
+            let savedTheme = localStorage.getItem("theme");
+
+            if (savedTheme === "dark") {
+
+                document.body.classList.add("dark");
+
+                updateThemeText("dark");
+
+            } else {
+
+                document.body.classList.remove("dark");
+
+                updateThemeText("light");
+            }
+        }
+
+
+        function updateThemeText(theme) {
+
+            let themeText =
+                document.getElementById("themeText");
+
+            let themeButton =
+                document.getElementById("themeButton");
+
+
+            if (theme === "dark") {
+
+                themeText.textContent = "Dark";
+
+                themeButton.textContent =
+                    "Switch to Light Theme";
+
+            } else {
+
+                themeText.textContent = "Light";
+
+                themeButton.textContent =
+                    "Switch to Dark Theme";
+            }
+        }
+        function saveUsername() {
+
+            let username =
+                document.getElementById("username").value;
+
+
+            if (username.trim() === "") {
+
+                alert("Please enter your name.");
+
+                return;
+            }
+
+            localStorage.setItem("username", username);
+
+
+            document.getElementById("displayName")
+                .textContent = username;
+
+
+            showStatus("Username saved in localStorage.");
+
+            updateStorageDisplay();
+        }
+
+
+        function loadUsername() {
+
+            let savedUsername =
+                localStorage.getItem("username");
+
+
+            if (savedUsername !== null) {
+
+                document.getElementById("displayName")
+                    .textContent = savedUsername;
+
+                document.getElementById("username")
+                    .value = savedUsername;
+
+            } else {
+
+                document.getElementById("displayName")
+                    .textContent = "Not saved";
+            }
+        }
+
+
+        function checkSession() {
+
+            let visited =
+                sessionStorage.getItem("visited");
+
+
+            if (visited === "true") {
+
+                document.getElementById("sessionMessage")
+                    .textContent =
+                    "Welcome back to this session!";
+
+                document.getElementById("sessionStatus")
+                    .textContent = "Visited";
+
+            } else {
+
+                document.getElementById("sessionMessage")
+                    .textContent =
+                    "Welcome! This is your first visit in this session.";
+
+                document.getElementById("sessionStatus")
+                    .textContent = "First Visit";
+
+
+                // Store temporary session information
+                sessionStorage.setItem("visited", "true");
+            }
+        }
+
+        function updateStorageDisplay() {
+
+            // Get theme from localStorage
+            let theme =
+                localStorage.getItem("theme");
+
+
+            // Get username from localStorage
+            let username =
+                localStorage.getItem("username");
+
+
+            // Get visit status from sessionStorage
+            let visited =
+                sessionStorage.getItem("visited");
+
+
+            // Display localStorage values
+
+            document.getElementById("localTheme")
+                .textContent =
+                theme !== null ? theme : "None";
+
+
+            document.getElementById("localUsername")
+                .textContent =
+                username !== null ? username : "None";
+
+
+            // Display sessionStorage value
+
+            document.getElementById("sessionVisited")
+                .textContent =
+                visited !== null ? visited : "None";
+        }
+        function clearLocalStorage() {
+
+            // Remove all localStorage data
+            localStorage.clear();
+
+
+            // Restore default theme
+            document.body.classList.remove("dark");
+
+            updateThemeText("light");
+
+
+            document.getElementById("displayName")
+                .textContent = "Not saved";
+
+
+            document.getElementById("username")
+                .value = "";
+
+
+            showStatus("Local Storage has been cleared.");
+
+            updateStorageDisplay();
+        }
+
+
+        function clearSessionStorage() {
+
+            // Remove all sessionStorage data
+            sessionStorage.clear();
+
+
+            document.getElementById("sessionMessage")
+                .textContent =
+                "Session Storage has been cleared.";
+
+
+            document.getElementById("sessionStatus")
+                .textContent = "Cleared";
+
+
+            showStatus("Session Storage has been cleared.");
+
+            updateStorageDisplay();
+        }
+
+
+
+        function resetEverything() {
+
+            // Clear localStorage
+            localStorage.clear();
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+
+
+            // Restore light theme
+            document.body.classList.remove("dark");
+
+            updateThemeText("light");
+
+
+            // Clear username
+            document.getElementById("username")
+                .value = "";
+
+
+            document.getElementById("displayName")
+                .textContent = "Not saved";
+
+
+            // Reset session message
+            document.getElementById("sessionMessage")
+                .textContent =
+                "All preferences have been reset.";
+
+
+            document.getElementById("sessionStatus")
+                .textContent = "Reset";
+
+
+            showStatus("All storage and preferences have been reset.");
+
+            updateStorageDisplay();
+        }
+
+        function showStatus(message) {
+
+            document.getElementById("statusMessage")
+                .textContent = message;
+        }
+
+    </script>
+
+</body>
+
+</html>
